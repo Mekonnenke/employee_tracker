@@ -50,6 +50,55 @@ function init() {
   })
 }
 
+function choicesLoop(sqlStr, choices, role) {
+    connection.promise().query(`${sqlStr}`)
+    .then(data => {
+      const table = data[0]
+      if(!role) {
+        for(let i = 0; i < table.length; i++) {
+          choices.push({name: table[i].first_name + " " + table[i].last_name, value: table[i].id})
+          // console.log('choices',choices)
+        }
+      } else {
+          for(let i = 0; i < table.length; i++) {
+            choices.push({name: table[i].title, value: table[i].id})
+            // console.log('choices',choices)
+          }
+      }
+    })
+}
+
+function displayDepartments() {
+  connection.query(`SELECT * from departments`, (err, data) => {
+    console.table(data)
+    init()
+  })
+}
+
+function displayRoles() {
+    connection.query(`SELECT roles.id, roles.title, roles.salary, departments.department_name AS department
+      FROM roles
+      LEFT JOIN departments
+      ON roles.department_id = departments.id;`, (err, data) => {
+        console.table(data)
+        init()
+      })
+}
+function displayEmployees() {
+  connection.query(`SELECT employees.id, employees.first_name AS first, employees.last_name AS last, roles.title AS roles, roles.salary AS salary, departments.department_name AS department, employees.manager_id AS manager FROM employees
+  JOIN roles
+  ON employees.role_id = roles.id
+  JOIN departments
+  ON roles.department_id = departments.id;`, (err, data) => {
+    if(err) {
+      throw err
+    }
+    else {
+      console.table(data)
+      init()
+    }
+  })
+}
 
 function addDepartment() {
   inquirer.prompt(departmentQuestion)
