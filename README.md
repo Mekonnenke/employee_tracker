@@ -12,7 +12,7 @@ The project is used for to store
  - mysql
  - dotenv
  - 
-# To run the upp 
+# To run the App 
  - npm start 
 
 #Links
