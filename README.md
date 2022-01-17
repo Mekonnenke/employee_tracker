@@ -11,7 +11,7 @@ The project is used for to store
  - console table
  - mysql
  - dotenv
- - 
+ 
 # To run the App 
  - npm start 
 
